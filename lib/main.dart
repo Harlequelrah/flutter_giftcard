@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     FadeInUp(
                         duration: const Duration(milliseconds: 1300),
                         child: const Text(
-                          "Ravi de Vous Revoir ",
+                          "Ravi de Vous Revoir",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         )),
                   ],

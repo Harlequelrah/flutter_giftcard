@@ -38,7 +38,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: const Text('GiftCard'),
         centerTitle: true,
         actions: [
           IconButton(
