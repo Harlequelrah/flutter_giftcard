@@ -30,7 +30,7 @@ class RegistrationPage extends StatelessWidget {
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
-                labelText: 'Nom d\'utilisateur',
+                labelText: 'Email',
               ),
             ),
             TextField(

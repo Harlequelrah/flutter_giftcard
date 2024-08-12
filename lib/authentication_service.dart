@@ -6,8 +6,7 @@ export 'authentication_service.dart';
 import 'home.dart';
 import 'main.dart';
 
-Future<void> login(
-    String email, String password, BuildContext context) async {
+Future<void> login(String email, String password, BuildContext context) async {
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Veuillez remplir tous les champs.')),
@@ -93,9 +92,9 @@ Future<void> _saveToken(String token) async {
   await prefs.setString('token', token);
 }
 
-Future<void> register(
-    String email, String password, String nomComplet , String adresse,String telephone, BuildContext context) async {
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/register');
+Future<void> register(String email, String password, String nomComplet,
+    String adresse, String telephone, BuildContext context) async {
+  final url = Uri.parse('http://10.0.2.2:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -118,6 +117,7 @@ Future<void> register(
         'nomComplet': nomComplet,
       }),
     );
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -136,8 +136,8 @@ Future<void> register(
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content:
-              Text('Inscription réussie, mais token manquant ou invalide.')),
+              content: Text(
+                  'Inscription réussie, mais token manquant ou invalide.')),
         );
       }
     } else {
@@ -158,15 +158,12 @@ Future<void> register(
       SnackBar(content: Text('Erreur d\'inscription: ${e.toString()}')),
     );
   }
-    Future<String?> getToken() async {
+
+}
+Future<String?> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
-  Future<bool> isLoggedIn() async {
-    final String? token = await getToken();
-    return token!= null;
-  }
-
 
   Future<void> logout(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -176,5 +173,3 @@ Future<void> register(
       MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
-}
-

@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'registration_page.dart';
+import 'authentication_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +22,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +121,8 @@ class LoginPage extends StatelessWidget {
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey.shade200))),
-                                  child: const TextField(
+                                  child: TextField(
+                                    controller: emailController,
                                     decoration: InputDecoration(
                                         hintText: "Email",
                                         hintStyle:
@@ -119,7 +136,8 @@ class LoginPage extends StatelessWidget {
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey.shade200))),
-                                  child: const TextField(
+                                  child: TextField(
+                                    controller: passwordController,
                                     obscureText: true,
                                     decoration: InputDecoration(
                                         hintText: "Mot de Passe",
@@ -146,7 +164,10 @@ class LoginPage extends StatelessWidget {
                       FadeInUp(
                           duration: const Duration(milliseconds: 1600),
                           child: MaterialButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await login(emailController.text,
+                                  passwordController.text, context);
+                            },
                             height: 50,
                             color: Colors.orange[900],
                             shape: RoundedRectangleBorder(
@@ -161,6 +182,9 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                           )),
+                      const SizedBox(
+                        height: 40,
+                      ),
                       FadeInUp(
                           duration: const Duration(milliseconds: 1600),
                           child: MaterialButton(
