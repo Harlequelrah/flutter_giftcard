@@ -8,6 +8,9 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    final TextEditingController nomCompletController = TextEditingController();
+    final TextEditingController adresseController = TextEditingController();
+    final TextEditingController telephoneController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -18,6 +21,12 @@ class RegistrationPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            TextField(
+              controller: nomCompletController,
+              decoration: const InputDecoration(
+                labelText: 'Nom Complet',
+              ),
+            ),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -31,10 +40,29 @@ class RegistrationPage extends StatelessWidget {
                 labelText: 'Mot de passe',
               ),
             ),
+            TextField(
+              controller: telephoneController,
+              decoration: const InputDecoration(
+                labelText: 'Téléphone',
+              ),
+            ),
+            TextField(
+              controller: adresseController,
+              decoration: const InputDecoration(
+                labelText: 'Adresse',
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 register(
-                    emailController.text, passwordController.text, context);
+                  emailController.text,
+                  passwordController.text,
+                  nomCompletController.text,
+                  adresseController.text,
+                  telephoneController.text,
+                  context,
+                );
               },
               child: const Text('S\'inscrire'),
             ),

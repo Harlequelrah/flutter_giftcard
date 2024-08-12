@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(), // Ajout de la page d'accueil
     );
@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,59 +39,59 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     FadeInUp(
-                        duration: Duration(milliseconds: 1000),
-                        child: Text(
+                        duration: const Duration(milliseconds: 1000),
+                        child: const Text(
                           "GoChap GiftCard",
                           style: TextStyle(color: Colors.white, fontSize: 40),
                         )),
                     FadeInUp(
-                        duration: Duration(milliseconds: 1000),
-                        child: Text(
+                        duration: const Duration(milliseconds: 1000),
+                        child: const Text(
                           "Login",
                           style: TextStyle(color: Colors.white, fontSize: 30),
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     FadeInUp(
-                        duration: Duration(milliseconds: 1300),
-                        child: Text(
+                        duration: const Duration(milliseconds: 1300),
+                        child: const Text(
                           "Ravi de Vous Revoir ",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         )),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(60),
                         topRight: Radius.circular(60))),
                 child: Padding(
-                  padding: EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(30),
                   child: Column(
                     children: <Widget>[
-                      SizedBox(
+                      const SizedBox(
                         height: 60,
                       ),
                       FadeInUp(
-                          duration: Duration(milliseconds: 1400),
+                          duration: const Duration(milliseconds: 1400),
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       color: Color.fromRGBO(225, 95, 27, .3),
                                       blurRadius: 20,
@@ -98,12 +100,12 @@ class LoginPage extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey.shade200))),
-                                  child: TextField(
+                                  child: const TextField(
                                     decoration: InputDecoration(
                                         hintText: "Email",
                                         hintStyle:
@@ -112,12 +114,12 @@ class LoginPage extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey.shade200))),
-                                  child: TextField(
+                                  child: const TextField(
                                     obscureText: true,
                                     decoration: InputDecoration(
                                         hintText: "Mot de Passe",
@@ -129,20 +131,20 @@ class LoginPage extends StatelessWidget {
                               ],
                             ),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       FadeInUp(
-                          duration: Duration(milliseconds: 1500),
-                          child: Text(
+                          duration: const Duration(milliseconds: 1500),
+                          child: const Text(
                             "Mot de Passe Oublié?",
                             style: TextStyle(color: Colors.grey),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       FadeInUp(
-                          duration: Duration(milliseconds: 1600),
+                          duration: const Duration(milliseconds: 1600),
                           child: MaterialButton(
                             onPressed: () {},
                             height: 50,
@@ -150,7 +152,7 @@ class LoginPage extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "Se Connecter",
                                 style: TextStyle(
@@ -160,7 +162,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           )),
                       FadeInUp(
-                          duration: Duration(milliseconds: 1600),
+                          duration: const Duration(milliseconds: 1600),
                           child: MaterialButton(
                             onPressed: () {
                               Navigator.push(
@@ -175,7 +177,7 @@ class LoginPage extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "S'Inscrire",
                                 style: TextStyle(

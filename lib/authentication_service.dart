@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 export 'authentication_service.dart';
 import 'home.dart';
+import 'main.dart';
 
 Future<void> login(
     String email, String password, BuildContext context) async {
@@ -93,7 +94,7 @@ Future<void> _saveToken(String token) async {
 }
 
 Future<void> register(
-    String email, String password, BuildContext context) async {
+    String email, String password, String nomComplet , String adresse,String telephone, BuildContext context) async {
   final url = Uri.parse('http://10.0.2.2:5107/api/User/register');
 
   if (email.isEmpty || password.isEmpty) {
@@ -112,6 +113,9 @@ Future<void> register(
       body: jsonEncode(<String, String>{
         'email': email,
         'password': password,
+        'telephone': telephone,
+        'adresse': adresse,
+        'nomComplet': nomComplet,
       }),
     );
 
@@ -152,6 +156,24 @@ Future<void> register(
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Erreur d\'inscription: ${e.toString()}')),
+    );
+  }
+    Future<String?> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+  Future<bool> isLoggedIn() async {
+    final String? token = await getToken();
+    return token!= null;
+  }
+
+
+  Future<void> logout(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 }

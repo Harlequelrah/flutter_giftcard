@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'authentication_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,37 +21,32 @@ class HomePageState extends State<HomePage> {
   Future<void> _fetchData() async {}
 
   Future<void> _loadTokenAndData() async {
-    final String? token = await _getToken();
+    final String? token = await getToken();
     if (token != null) {
       setState(() {
         accessToken = token;
       });
-      await _fetchData();
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     }
-  }
-
-  Future<String?> _getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
-  }
-
-  Future<void> _logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Todo List'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => logout(context),
+          ),
+        ],
+      ),
       body: Center(
         child: Text(
           'Bienvenue sur GoChap!',
