@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'authentication_service.dart';
+import 'models.dart';
+import 'beneficiary_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +13,12 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   late String accessToken;
+  late BeneficiaryUser beneficiary = BeneficiaryUser(
+    idBeneficiary: 0,
+    nomComplet: '',
+    email: '',
+    solde: '',
+  );
 
   @override
   void initState() {
@@ -19,7 +27,18 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchData() async {
-    // Logique pour récupérer les données si nécessaire
+    final String id = getClaimValue(accessToken, "nameid") ?? "";
+    final int idUser = int.tryParse(id) ?? 0;
+    print("accessToken : $accessToken , id : $idUser");
+    try {
+      final BeneficiaryUser fetchedbeneficiary =
+          await BeneficiaryService.fetchBeneficiaryUser(accessToken, idUser);
+      setState(() {
+        beneficiary = fetchedbeneficiary;
+      });
+    } catch (e) {
+      print('Failed to fetch beneficiary: $e');
+    }
   }
 
   Future<void> _loadTokenAndData() async {
@@ -91,7 +110,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Nom de l\'utilisateur',
+                          beneficiary.nomComplet,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -100,7 +119,7 @@ class HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          'Email de l\'utilisateur',
+                          beneficiary.email,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white70,
@@ -135,7 +154,7 @@ class HomePageState extends State<HomePage> {
                                 color: Colors.white),
                             SizedBox(width: 5),
                             Text(
-                              'XOF 0.00',
+                              beneficiary.solde,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
