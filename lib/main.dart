@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             child: const Center(
                               child: Text(
-                                "S'Inscrire",
+                                "Allez à la page d'Inscription",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),

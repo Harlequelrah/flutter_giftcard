@@ -14,7 +14,7 @@ Future<void> login(String email, String password, BuildContext context) async {
     return;
   }
 
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/login');
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -41,14 +41,18 @@ Future<void> login(String email, String password, BuildContext context) async {
 
         if (role != 'BENEFICIARY' && role != 'UTILISATEUR') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Vous n\'êtes pas autorisé à vous connecter à cette application.')),
+            const SnackBar(
+                content: Text(
+                    'Vous n\'êtes pas autorisé à vous connecter à cette application.')),
           );
           return;
         }
 
         if (isActive.toLowerCase() == 'false') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Votre compte n\'est plus actif. Merci de contacter le support de GoChap.')),
+            const SnackBar(
+                content: Text(
+                    'Votre compte n\'est plus actif. Merci de contacter le support de GoChap.')),
           );
           return;
         }
@@ -61,28 +65,29 @@ Future<void> login(String email, String password, BuildContext context) async {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Échec de la connexion. Token invalide.')),
+          const SnackBar(
+              content: Text('Échec de la connexion. Token invalide.')),
         );
-
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Échec de la connexion. Vérifiez vos informations.')),
+        const SnackBar(
+            content: Text('Échec de la connexion. Vérifiez vos informations.')),
       );
-
+      print('email : ${email},password : ${password}');
+      print('Response body: ${response.body}');
+      print('Response code: ${response.statusCode}');
     }
   } catch (e) {
     print('Erreur: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Erreur de connexion. Veuillez réessayer.')),
     );
-
   }
 }
 
-
 Future<void> refreshToken(String refreshToken) async {
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/refresh-token');
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -115,7 +120,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/register/user');
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -179,21 +184,22 @@ Future<void> register(String email, String password, String nomComplet,
       SnackBar(content: Text('Erreur d\'inscription: ${e.toString()}')),
     );
   }
-
 }
-Future<String?> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
-  }
 
-  Future<void> logout(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-  }
+Future<String?> getToken() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token');
+}
+
+Future<void> logout(BuildContext context) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => const LoginPage()),
+  );
+}
+
 Map<String, String> parseJwt(String token) {
   final parts = token.split('.');
   if (parts.length != 3) {
@@ -207,6 +213,7 @@ Map<String, String> parseJwt(String token) {
 
   return decodedMap.map((key, value) => MapEntry(key, value.toString()));
 }
+
 String? getClaimValue(String token, String key) {
   final parsedToken = parseJwt(token);
   return parsedToken[key];
