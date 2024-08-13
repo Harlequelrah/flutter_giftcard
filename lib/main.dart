@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           )),
                       const SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       FadeInUp(
                           duration: const Duration(milliseconds: 1500),
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(color: Colors.grey),
                           )),
                       const SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       FadeInUp(
                           duration: const Duration(milliseconds: 1600),
@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           )),
                       const SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       FadeInUp(
                           duration: const Duration(milliseconds: 1600),
