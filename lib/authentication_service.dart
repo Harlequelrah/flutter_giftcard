@@ -14,6 +14,8 @@ Future<void> login(String email, String password, BuildContext context) async {
     );
     return;
   }
+  email = email.trim();
+  password = password.trim();
 
   final url = Uri.parse('http://192.168.0.113:5107/api/User/login');
   try {
@@ -61,8 +63,7 @@ Future<void> login(String email, String password, BuildContext context) async {
         await _saveToken(token);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(IdUser:id)),
+          MaterialPageRoute(builder: (context) => HomePage(IdUser: id)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

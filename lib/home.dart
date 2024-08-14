@@ -13,7 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  late BeneficiaryUser beneficiary;
+  late BeneficiaryUser beneficiary = new BeneficiaryUser(
+      idBeneficiary: 0,
+      nomComplet: 'Username',
+      email: 'username@example.com',
+      solde: 'XOF 0.00');
   late String accessToken;
   late String IdUser;
 
@@ -28,7 +32,7 @@ class HomePageState extends State<HomePage> {
     try {
       final BeneficiaryUser fetchedbeneficiary =
           await BeneficiaryService.fetchBeneficiaryUser(accessToken, IdUser);
-        setState(() {
+      setState(() {
         beneficiary = fetchedbeneficiary;
       });
     } catch (e) {
@@ -72,11 +76,10 @@ class HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.orange[900]),
-            onPressed: () {
-              // Logique de notification
-            },
-          ),
+              icon: Icon(Icons.logout, color: Colors.orange[900]),
+              onPressed: () async {
+                await logout(context);
+              }),
         ],
       ),
       body: Padding(

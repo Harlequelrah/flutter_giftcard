@@ -165,8 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                           duration: const Duration(milliseconds: 1600),
                           child: MaterialButton(
                             onPressed: () async {
-                              await login(emailController.text.trim(),
-                                  passwordController.text.trim(), context);
+                              await login(emailController.text,
+                                  passwordController.text, context);
                             },
                             height: 50,
                             color: Colors.orange[900],
