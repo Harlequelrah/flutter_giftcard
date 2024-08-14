@@ -3,6 +3,8 @@ import 'main.dart';
 import 'authentication_service.dart';
 import 'beneficiary_service.dart';
 import 'models.dart';
+import 'history_page.dart';
+import 'purchase_page.dart';
 
 class HomePage extends StatefulWidget {
   final String IdUser;
@@ -176,13 +178,25 @@ class HomePageState extends State<HomePage> {
                   _buildFeatureButton(
                     icon: Icons.history,
                     label: 'Historique',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HistoryPage(IdUser: IdUser),
+                        ),
+                      );
+                    },
                   ),
                   _buildFeatureButton(
                     icon: Icons.shopping_cart,
                     label: 'Achat',
                     onTap: () {
-                      // Logique d'achat
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PurchasePage(accessToken: accessToken),
+                        ),
+                      );
                     },
                   ),
                 ],

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'registration_page.dart';
 import 'authentication_service.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();

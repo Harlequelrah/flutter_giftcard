@@ -20,3 +20,29 @@ class BeneficiaryUser {
     );
   }
 }
+
+class History {
+  final int id;
+  final int idBeneficiary;
+  final String action;
+  final double montant;
+  final String date;
+
+  History({
+    required this.id,
+    required this.idBeneficiary,
+    required this.action,
+    required this.montant,
+    required this.date,
+  });
+
+  factory History.fromJson(Map<String, dynamic> json) {
+    return History(
+      id: json['id'],
+      idBeneficiary: json['idBeneficiary'],
+      action: json['action'],
+      montant: json['montant'].toDouble(),
+      date: json['date'],
+    );
+  }
+}

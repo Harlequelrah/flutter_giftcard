@@ -23,4 +23,41 @@ class BeneficiaryService {
       throw Exception('Failed to load beneficiary');
     }
   }
+
+  static Future<String> fetchQrCodeToken(String accessToken, String id) async {
+    final String url = '$baseUrl/Beneficiary/Token/$id';
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse['token'];
+    } else {
+      throw Exception('Failed to load QRCodeToken');
+    }
+  }
+
+  static Future<List<History>> fetchHistories(
+      String accessToken, String idBeneficiary) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/Beneficiary/history/$idBeneficiary'),
+      headers: <String, String>{
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> historiesJson = jsonResponse['\$values'];
+      return historiesJson.map((json) => History.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load histories');
+    }
+  }
 }
