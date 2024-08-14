@@ -5,8 +5,8 @@ import 'models.dart';
 import 'main.dart';
 
 class HistoryPage extends StatefulWidget {
-  final String IdUser;
-  const HistoryPage({Key? key, required this.IdUser}) : super(key: key);
+  final String idBeneficiary;
+  const HistoryPage({Key? key, required this.idBeneficiary}) : super(key: key);
 
   @override
   _HistoryPageState createState() => _HistoryPageState();
@@ -14,13 +14,13 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   late String accessToken;
-  late String IdUser;
+  late String idBeneficiary;
   List<History> histories = [];
 
   @override
   void initState() {
     super.initState();
-    IdUser = widget.IdUser;
+    idBeneficiary = widget.idBeneficiary;
     _loadTokenAndFetchHistories();
   }
 
@@ -42,7 +42,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Future<void> _fetchHistories() async {
     try {
       final List<History> fetchedHistories =
-          await BeneficiaryService.fetchHistories(accessToken, IdUser);
+          await BeneficiaryService.fetchHistories(accessToken, idBeneficiary);
       setState(() {
         histories = fetchedHistories;
       });

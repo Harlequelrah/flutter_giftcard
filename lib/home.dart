@@ -182,7 +182,7 @@ class HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HistoryPage(IdUser: IdUser),
+                          builder: (context) => HistoryPage(idBeneficiary: beneficiary.idBeneficiary.toString()),
                         ),
                       );
                     },

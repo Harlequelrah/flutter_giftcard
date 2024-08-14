@@ -29,6 +29,14 @@ Future<void> login(String email, String password, BuildContext context) async {
         'password': password,
       }),
     );
+          if (response.statusCode == 403) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Votre accès a été refusé . Merci de contacter le support de GoChap.')),
+          );
+          return;
+        }
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -40,7 +48,6 @@ Future<void> login(String email, String password, BuildContext context) async {
         final Map<String, String> claims = parseJwt(token);
         final String id = claims['nameid'] ?? '';
         final String role = claims['role'] ?? '';
-        final String isActive = claims['IsActive'] ?? '';
 
         if (role != 'BENEFICIARY') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -51,14 +58,7 @@ Future<void> login(String email, String password, BuildContext context) async {
           return;
         }
 
-        if (isActive.toLowerCase() == 'false') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text(
-                    'Votre compte n\'est plus actif. Merci de contacter le support de GoChap.')),
-          );
-          return;
-        }
+
 
         await _saveToken(token);
         Navigator.pushReplacement(
