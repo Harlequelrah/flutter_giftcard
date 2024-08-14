@@ -2,53 +2,32 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'authentication_service.dart';
 import 'models.dart';
-import 'beneficiary_service.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final BeneficiaryUser beneficiary;
+  const HomePage({super.key, required this.beneficiary});
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
+  late BeneficiaryUser beneficiary;
   late String accessToken;
-  late BeneficiaryUser beneficiary = BeneficiaryUser(
-    idBeneficiary: 0,
-    nomComplet: '',
-    email: '',
-    solde: '',
-  );
 
   @override
   void initState() {
     super.initState();
-    _loadTokenAndData();
+    beneficiary = widget.beneficiary;
+    _loadToken();
   }
 
-  Future<void> _fetchData() async {
-    final String id = getClaimValue(accessToken, "nameid") ?? "";
-    final int idUser = int.tryParse(id) ?? 0;
-    print("accessToken : $accessToken , id : $idUser");
-    try {
-      final BeneficiaryUser fetchedbeneficiary =
-          await BeneficiaryService.fetchBeneficiaryUser(accessToken, idUser);
-      setState(() {
-        beneficiary = fetchedbeneficiary;
-      });
-    } catch (e) {
-      print('Failed to fetch beneficiary: $e');
-    }
-  }
-
-  Future<void> _loadTokenAndData() async {
-    // Logique pour récupérer le token
+  Future<void> _loadToken() async {
     final String? token = await getToken();
     if (token != null) {
       setState(() {
         accessToken = token;
       });
-      await _fetchData();
     } else {
       Navigator.pushReplacement(
         context,
@@ -132,14 +111,14 @@ class HomePageState extends State<HomePage> {
                     height: 50,
                     width: 1,
                     color: Colors.white54,
-                    margin: EdgeInsets.symmetric(horizontal: 16.0),
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Solde',
+                          beneficiary.solde,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -154,7 +133,7 @@ class HomePageState extends State<HomePage> {
                                 color: Colors.white),
                             SizedBox(width: 5),
                             Text(
-                              beneficiary.solde,
+                              "solde",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

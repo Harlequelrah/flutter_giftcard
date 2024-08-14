@@ -1,4 +1,3 @@
-
 class BeneficiaryUser {
   final int idBeneficiary;
   final String nomComplet;
@@ -14,19 +13,10 @@ class BeneficiaryUser {
 
   factory BeneficiaryUser.fromJson(Map<String, dynamic> json) {
     return BeneficiaryUser(
-      idBeneficiary: json['IdBeneficiary'],
-      nomComplet: json['NomComplet'],
-      email: json['Email'],
-      solde: json['Solde'],
+      idBeneficiary: json['idBeneficiary'],
+      nomComplet: json['nomComplet'],
+      email: json['email'],
+      solde: json['solde'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'IdBeneficiary': idBeneficiary,
-      'NomComplet': nomComplet,
-      'Email': email,
-      'Solde': solde,
-    };
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 export 'authentication_service.dart';
+import 'beneficiary_service.dart';
+import 'models.dart';
 import 'home.dart';
 import 'main.dart';
 
@@ -35,11 +37,11 @@ Future<void> login(String email, String password, BuildContext context) async {
           responseData['token'] is String) {
         final String token = responseData['token'];
         final Map<String, String> claims = parseJwt(token);
-
+        final String id = claims['nameid'] ?? '';
         final String role = claims['role'] ?? '';
         final String isActive = claims['IsActive'] ?? '';
 
-        if (role != 'BENEFICIARY' && role != 'UTILISATEUR') {
+        if (role != 'BENEFICIARY') {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
                 content: Text(
@@ -58,10 +60,12 @@ Future<void> login(String email, String password, BuildContext context) async {
         }
 
         await _saveToken(token);
-
+        final BeneficiaryUser fetchedbeneficiary =
+            await BeneficiaryService.fetchBeneficiaryUser(token, id);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(
+              builder: (context) => HomePage(beneficiary: fetchedbeneficiary)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -205,7 +209,6 @@ Map<String, String> parseJwt(String token) {
   if (parts.length != 3) {
     throw Exception('JWT invalide');
   }
-
   final payload = parts[1];
   final normalized = base64Url.normalize(payload);
   final decodedBytes = base64Url.decode(normalized);

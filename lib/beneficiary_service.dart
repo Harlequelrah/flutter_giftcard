@@ -4,22 +4,25 @@ import 'dart:convert';
 
 const String baseUrl = 'http://192.168.0.113:5107/api';
 
-class BeneficiaryService
-{
-  static Future<BeneficiaryUser> fetchBeneficiaryUser(String accessToken, int id) async {
+class BeneficiaryService {
+  static Future<BeneficiaryUser> fetchBeneficiaryUser(
+      String accessToken, String id) async {
+    print("ID de recu  valide : $id");
+    final String url = '$baseUrl/Beneficiary/User/$id';
+    print('Url de recu valide :$url');
     final response = await http.get(
-      Uri.parse('$baseUrl/Beneficiary/User/$id'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       },
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       return BeneficiaryUser.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load todo item');
+      throw Exception('Failed to load beneficiary');
     }
   }
-
 }
