@@ -17,7 +17,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/login');
+  final url = Uri.parse('http://localhost:5107/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -63,7 +63,7 @@ Future<void> login(String email, String password, BuildContext context) async {
         await _saveToken(token);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(IdUser: id)),
+          MaterialPageRoute(builder: (context) => HomePage(idUser: id)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +89,7 @@ Future<void> login(String email, String password, BuildContext context) async {
 }
 
 Future<void> refreshToken(String refreshToken) async {
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/refresh-token');
+  final url = Uri.parse('http://localhost:5107/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -122,7 +122,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/register/user');
+  final url = Uri.parse('http://localhost:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(

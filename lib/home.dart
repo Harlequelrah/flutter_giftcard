@@ -7,8 +7,8 @@ import 'history_page.dart';
 import 'purchase_page.dart';
 
 class HomePage extends StatefulWidget {
-  final String IdUser;
-  const HomePage({super.key, required this.IdUser});
+  final String idUser;
+  const HomePage({super.key, required this.idUser});
 
   @override
   HomePageState createState() => HomePageState();
@@ -21,19 +21,19 @@ class HomePageState extends State<HomePage> {
       email: 'username@example.com',
       solde: 'XOF 0.00');
   late String accessToken;
-  late String IdUser;
+  late String idUser;
 
   @override
   void initState() {
     super.initState();
-    IdUser = widget.IdUser;
+    idUser = widget.idUser;
     _loadTokenAndData();
   }
 
   Future<void> _fetchData() async {
     try {
       final BeneficiaryUser fetchedbeneficiary =
-          await BeneficiaryService.fetchBeneficiaryUser(accessToken, IdUser);
+          await BeneficiaryService.fetchBeneficiaryUser(accessToken, idUser);
       setState(() {
         beneficiary = fetchedbeneficiary;
       });

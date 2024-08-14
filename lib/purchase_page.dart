@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'home.dart';
+import 'authentication_service.dart';
 
 class PurchasePage extends StatelessWidget {
   final String accessToken;
@@ -15,7 +17,12 @@ class PurchasePage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+                      final id = getClaimValue(accessToken, "nameid") ??"";
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage(idUser: id)),
+          );
           },
         ),
       ),
