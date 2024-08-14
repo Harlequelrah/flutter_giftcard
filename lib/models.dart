@@ -13,7 +13,7 @@ class BeneficiaryUser {
 
   factory BeneficiaryUser.fromJson(Map<String, dynamic> json) {
     return BeneficiaryUser(
-      idBeneficiary: json['idBeneficiary'],
+      idBeneficiary: json['specialId'],
       nomComplet: json['nomComplet'],
       email: json['email'],
       solde: json['solde'],

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'authentication_service.dart';
+import 'beneficiary_service.dart';
 import 'models.dart';
 
 class HomePage extends StatefulWidget {
-  final BeneficiaryUser beneficiary;
-  const HomePage({super.key, required this.beneficiary});
+  final String IdUser;
+  const HomePage({super.key, required this.IdUser});
 
   @override
   HomePageState createState() => HomePageState();
@@ -14,20 +15,34 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   late BeneficiaryUser beneficiary;
   late String accessToken;
+  late String IdUser;
 
   @override
   void initState() {
     super.initState();
-    beneficiary = widget.beneficiary;
-    _loadToken();
+    IdUser = widget.IdUser;
+    _loadTokenAndData();
   }
 
-  Future<void> _loadToken() async {
+  Future<void> _fetchData() async {
+    try {
+      final BeneficiaryUser fetchedbeneficiary =
+          await BeneficiaryService.fetchBeneficiaryUser(accessToken, IdUser);
+        setState(() {
+        beneficiary = fetchedbeneficiary;
+      });
+    } catch (e) {
+      print('Failed to load beneficiary $e');
+    }
+  }
+
+  Future<void> _loadTokenAndData() async {
     final String? token = await getToken();
     if (token != null) {
       setState(() {
         accessToken = token;
       });
+      await _fetchData();
     } else {
       Navigator.pushReplacement(
         context,

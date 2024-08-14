@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 export 'authentication_service.dart';
-import 'beneficiary_service.dart';
-import 'models.dart';
+
 import 'home.dart';
 import 'main.dart';
 
@@ -60,12 +59,10 @@ Future<void> login(String email, String password, BuildContext context) async {
         }
 
         await _saveToken(token);
-        final BeneficiaryUser fetchedbeneficiary =
-            await BeneficiaryService.fetchBeneficiaryUser(token, id);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => HomePage(beneficiary: fetchedbeneficiary)),
+              builder: (context) => HomePage(IdUser:id)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

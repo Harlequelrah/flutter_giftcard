@@ -7,9 +7,7 @@ const String baseUrl = 'http://192.168.0.113:5107/api';
 class BeneficiaryService {
   static Future<BeneficiaryUser> fetchBeneficiaryUser(
       String accessToken, String id) async {
-    print("ID de recu  valide : $id");
     final String url = '$baseUrl/Beneficiary/User/$id';
-    print('Url de recu valide :$url');
     final response = await http.get(
       Uri.parse(url),
       headers: {
