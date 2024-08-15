@@ -17,7 +17,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('http://localhost:5107/api/User/login');
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -87,9 +87,21 @@ Future<void> login(String email, String password, BuildContext context) async {
     );
   }
 }
+bool isTokenExpired(String token) {
+  final String? expirationClaim = getClaimValue(token, 'exp');
+  if (expirationClaim == null) {
+    throw Exception('Le token ne contient pas de claim "exp".');
+  }
 
-Future<void> refreshToken(String refreshToken) async {
-  final url = Uri.parse('http://localhost:5107/api/User/refresh-token');
+  final int expirationTimestamp = int.parse(expirationClaim);
+  final DateTime expirationDate =
+      DateTime.fromMillisecondsSinceEpoch(expirationTimestamp * 1000);
+
+  return DateTime.now().isAfter(expirationDate);
+}
+
+Future<void> refreshToken(String token) async {
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -98,7 +110,7 @@ Future<void> refreshToken(String refreshToken) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'refreshToken': refreshToken,
+        'refreshToken': token,
       }),
     );
 
@@ -122,7 +134,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://localhost:5107/api/User/register/user');
+  final url = Uri.parse('http://192.168.0.113:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -138,11 +150,11 @@ Future<void> register(String email, String password, String nomComplet,
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password,
-        'telephone': telephone,
-        'adresse': adresse,
-        'nomComplet': nomComplet,
+        'email': email.trim(),
+        'password': password.trim(),
+        'telephone': telephone.trim(),
+        'adresse': adresse.trim(),
+        'nomComplet': nomComplet.trim(),
       }),
     );
     print('Response body: ${response.body}');
@@ -218,4 +230,13 @@ Map<String, String> parseJwt(String token) {
 String? getClaimValue(String token, String key) {
   final parsedToken = parseJwt(token);
   return parsedToken[key];
+}
+
+Future<void> loadTokenState()async{
+  final String? token = await getToken();
+    if (token != null) {
+      if (isTokenExpired(token)) {
+        await refreshToken(token);
+      }
+    }
 }
