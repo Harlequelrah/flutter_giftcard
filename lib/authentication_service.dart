@@ -172,7 +172,7 @@ Future<void> register(String email, String password, String nomComplet,
           const SnackBar(content: Text('Inscription réussie')),
         );
 
-        await login(email, password, context);
+        // await login(email, password, context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
