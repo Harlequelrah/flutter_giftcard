@@ -1,54 +1,37 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'authentication_service.dart';
-import 'beneficiary_service.dart';
 import 'models.dart';
 import 'history_page.dart';
 import 'purchase_page.dart';
 
 class HomePage extends StatefulWidget {
-  final String idUser;
-  const HomePage({super.key, required this.idUser});
+  final BeneficiaryUser beneficiary;
+  const HomePage({super.key, required this.beneficiary});
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  late BeneficiaryUser beneficiary = new BeneficiaryUser(
-      idBeneficiary: 0,
-      nomComplet: 'Username',
-      email: 'username@example.com',
-      solde: 'XOF 0.00');
   late String accessToken;
-  late String idUser;
+  late BeneficiaryUser beneficiary;
 
   @override
   void initState() {
     super.initState();
-    idUser = widget.idUser;
-    _loadTokenAndData();
+    beneficiary = widget.beneficiary;
+    _loadToken();
   }
 
-  Future<void> _fetchData() async {
-    try {
-      final BeneficiaryUser fetchedbeneficiary =
-          await BeneficiaryService.fetchBeneficiaryUser(accessToken, idUser);
-      setState(() {
-        beneficiary = fetchedbeneficiary;
-      });
-    } catch (e) {
-      print('Failed to load beneficiary $e');
-    }
-  }
 
-  Future<void> _loadTokenAndData() async {
+
+  Future<void> _loadToken() async {
     final String? token = await getToken();
     if (token != null) {
       setState(() {
         accessToken = token;
       });
-      await _fetchData();
     } else {
       Navigator.pushReplacement(
         context,
@@ -182,7 +165,9 @@ class HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HistoryPage(idBeneficiary: beneficiary.idBeneficiary.toString()),
+                          builder: (context) => HistoryPage(
+                              idBeneficiary:
+                                  beneficiary.idBeneficiary.toString()),
                         ),
                       );
                     },
@@ -194,7 +179,8 @@ class HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PurchasePage(accessToken: accessToken),
+                          builder: (context) =>
+                              PurchasePage(accessToken: accessToken),
                         ),
                       );
                     },

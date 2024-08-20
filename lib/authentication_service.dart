@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 export 'authentication_service.dart';
-
+import 'beneficiary_service.dart';
 import 'home.dart';
+import 'models.dart';
 import 'main.dart';
 
 Future<void> login(String email, String password, BuildContext context) async {
@@ -17,7 +18,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/login');
+  final url = Uri.parse('http://192.168.0.103:5107/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -29,14 +30,14 @@ Future<void> login(String email, String password, BuildContext context) async {
         'password': password,
       }),
     );
-          if (response.statusCode == 403) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text(
-                    'Votre accès a été refusé . Merci de contacter le support de GoChap.')),
-          );
-          return;
-        }
+    if (response.statusCode == 403 || response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Votre accès a été refusé . Merci de contacter le support de GoChap.')),
+      );
+      return;
+    }
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
@@ -46,7 +47,7 @@ Future<void> login(String email, String password, BuildContext context) async {
           responseData['token'] is String) {
         final String token = responseData['token'];
         final Map<String, String> claims = parseJwt(token);
-        final String id = claims['nameid'] ?? '';
+        // final String id = claims['nameid'] ?? '';
         final String role = claims['role'] ?? '';
 
         if (role != 'BENEFICIARY') {
@@ -58,13 +59,8 @@ Future<void> login(String email, String password, BuildContext context) async {
           return;
         }
 
-
-
         await _saveToken(token);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage(idUser: id)),
-        );
+        await GetBeneficiaryUser(context,token);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -87,6 +83,28 @@ Future<void> login(String email, String password, BuildContext context) async {
     );
   }
 }
+
+Future<void> GetBeneficiaryUser(
+    BuildContext context, String token) async {
+  try {
+    final id = getClaimValue(token, "nameid") ?? "";
+    final BeneficiaryUser fetchedbeneficiary =
+        await BeneficiaryService.fetchBeneficiaryUser(token, id);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => HomePage(beneficiary: fetchedbeneficiary)),
+    );
+  } catch (e) {
+    print('Failed to load beneficiary $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text(
+              'Erreur lors du chargement de votre profil , Veuillez réessayer ultérieurement.')),
+    );
+  }
+}
+
 bool isTokenExpired(String token) {
   final String? expirationClaim = getClaimValue(token, 'exp');
   if (expirationClaim == null) {
@@ -101,7 +119,7 @@ bool isTokenExpired(String token) {
 }
 
 Future<void> refreshToken(String token) async {
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/refresh-token');
+  final url = Uri.parse('http://192.168.0.103:5107/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -134,7 +152,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://192.168.0.113:5107/api/User/register/user');
+  final url = Uri.parse('http://192.168.0.103:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -232,11 +250,11 @@ String? getClaimValue(String token, String key) {
   return parsedToken[key];
 }
 
-Future<void> loadTokenState()async{
+Future<void> loadTokenState() async {
   final String? token = await getToken();
-    if (token != null) {
-      if (isTokenExpired(token)) {
-        await refreshToken(token);
-      }
+  if (token != null) {
+    if (isTokenExpired(token)) {
+      await refreshToken(token);
     }
+  }
 }

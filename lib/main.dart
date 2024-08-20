@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'registration_page.dart';
 import 'authentication_service.dart';
 import 'home.dart';
+import 'beneficiary_service.dart';
+import 'models.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(), // Ajout de la page d'accueil
+      home: LoginPage(),
     );
   }
 }
@@ -31,6 +33,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late BeneficiaryUser beneficiary;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -44,20 +47,34 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _loadToken();
+    _loadTokenAndData();
   }
 
-  Future<void> _loadToken() async {
+  Future<void> _loadTokenAndData() async {
     await loadTokenState();
-      final String? token = await getToken();
-      if (token != null) {
-        final String id = getClaimValue(token, "nameid") ?? "";
+    final String? token = await getToken();
+    if (token != null) {
+      final String id = getClaimValue(token, "nameid") ?? "";
+      try {
+        final BeneficiaryUser fetchedbeneficiary =
+            await BeneficiaryService.fetchBeneficiaryUser(token, id);
+        setState(() {
+          beneficiary = fetchedbeneficiary;
+        });
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(idUser: id)),
+          MaterialPageRoute(
+              builder: (context) => HomePage(beneficiary: beneficiary)),
         );
-
-    } 
+      } catch (e) {
+        print('Failed to load beneficiary $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    "Erreur lors du chargement de votre profil ,Assurez vous d 'avoir une connexion internet active ou réessayer ultérieurement.")),
+          );
+      }
+    }
   }
 
   @override
