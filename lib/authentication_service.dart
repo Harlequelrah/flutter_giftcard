@@ -18,7 +18,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('http://192.168.0.103:5107/api/User/login');
+  final url = Uri.parse('http://10.0.2.2:5107/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -30,11 +30,19 @@ Future<void> login(String email, String password, BuildContext context) async {
         'password': password,
       }),
     );
-    if (response.statusCode == 403 || response.statusCode == 401) {
+    if (response.statusCode == 403) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text(
                 'Votre accès a été refusé . Merci de contacter le support de GoChap.')),
+      );
+      return;
+    }
+    if (response.statusCode == 401) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'La connexion a echoué ;Veuillez verifier vos identifiants.')),
       );
       return;
     }
@@ -119,7 +127,7 @@ bool isTokenExpired(String token) {
 }
 
 Future<void> refreshToken(String token) async {
-  final url = Uri.parse('http://192.168.0.103:5107/api/User/refresh-token');
+  final url = Uri.parse('http://10.0.2.2:5107/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -152,7 +160,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://192.168.0.103:5107/api/User/register/user');
+  final url = Uri.parse('http://10.0.2.2:5107/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(

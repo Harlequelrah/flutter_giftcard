@@ -2,7 +2,7 @@ import 'models.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const String baseUrl = 'http://192.168.0.103:5107/api';
+const String baseUrl = 'http://10.0.2.2:5107/api';
 
 class BeneficiaryService {
   static Future<BeneficiaryUser> fetchBeneficiaryUser(String accessToken,
