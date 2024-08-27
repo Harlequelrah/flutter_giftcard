@@ -5,8 +5,8 @@ import 'dart:convert';
 const String baseUrl = 'http://10.0.2.2:5107/api';
 
 class BeneficiaryService {
-  static Future<BeneficiaryUser> fetchBeneficiaryUser(String accessToken,
-      String id) async {
+  static Future<BeneficiaryUser> fetchBeneficiaryUser(
+      String accessToken, String id) async {
     final String url = '$baseUrl/Beneficiary/User/$id';
     final response = await http.get(
       Uri.parse(url),
@@ -32,7 +32,6 @@ class BeneficiaryService {
       throw Exception('Failed to load beneficiary: $errorMessage');
     }
   }
-
 
   static Future<String> fetchQrCodeToken(String accessToken, String id) async {
     final String url = '$baseUrl/Beneficiary/Token/$id';
