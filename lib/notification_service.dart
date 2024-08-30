@@ -17,8 +17,6 @@ class NotificationService {
   }
 
   Future<void> showNotification(int id, String title, String body) async {
-    print(
-        "Tentative d'affichage de la notification : id=$id, title=$title, body=$body");
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(

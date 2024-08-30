@@ -19,7 +19,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/login');
+  final url = Uri.parse('https://192.168.0.113:7168/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -128,7 +128,7 @@ bool isTokenExpired(String token) {
 }
 
 Future<void> refreshToken(String token) async {
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/refresh-token');
+  final url = Uri.parse('https://192.168.0.113:7168/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -161,7 +161,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('http://10.0.2.2:5107/api/User/register/user');
+  final url = Uri.parse('https://192.168.0.113:7168/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(

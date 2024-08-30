@@ -4,6 +4,17 @@ import 'package:signalr_core/signalr_core.dart';
 import 'notification_service.dart';
 import 'authentication_service.dart';
 
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
+
 Future<HubConnection> connectToSignalR(
     NotificationService notificationService) async {
   final String? token = await getToken();
@@ -15,10 +26,9 @@ Future<HubConnection> connectToSignalR(
 
   final connection = HubConnectionBuilder()
       .withUrl(
-        'http://10.0.2.2:5107/notificationHub',
+        'https://192.168.0.113:7168/notificationHub',
         HttpConnectionOptions(
-          client: IOClient(
-              HttpClient()..badCertificateCallback = (x, y, z) => true),
+          client: IOClient(),
           accessTokenFactory: () async => token,
         ),
       )

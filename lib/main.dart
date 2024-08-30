@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,9 +7,13 @@ import 'authentication_service.dart';
 import 'home.dart';
 import 'beneficiary_service.dart';
 import 'models.dart';
+import 'signalr_service.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
@@ -68,11 +73,11 @@ class _LoginPageState extends State<LoginPage> {
         );
       } catch (e) {
         print('Failed to load beneficiary $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text(
-                    "Erreur lors du chargement de votre profil ,Assurez vous d 'avoir une connexion internet active ou réessayer ultérieurement.")),
-          );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  "Erreur lors du chargement de votre profil ,Assurez vous d 'avoir une connexion internet active ou réessayer ultérieurement.")),
+        );
       }
     }
   }
