@@ -4,11 +4,13 @@ import 'package:signalr_core/signalr_core.dart';
 import 'notification_service.dart';
 import 'authentication_service.dart';
 
-Future<HubConnection> connectToSignalR(NotificationService notificationService) async {
+Future<HubConnection> connectToSignalR(
+    NotificationService notificationService) async {
   final String? token = await getToken();
 
   if (token == null) {
-    throw Exception("Token non trouvé. Assurez-vous que l'utilisateur est connecté.");
+    throw Exception(
+        "Token non trouvé. Assurez-vous que l'utilisateur est connecté.");
   }
 
   final connection = HubConnectionBuilder()
@@ -39,14 +41,18 @@ Future<HubConnection> connectToSignalR(NotificationService notificationService) 
     print("SignalR connection started");
 
     connection.on('ReceiveMessage', (message) {
+      String messageR = "";
+      if (message != null && message.isNotEmpty) {
+        messageR = message[0];
+      }
+
       print("Message reçu : ${message.toString()}");
       notificationService.showNotification(
         0,
         "Nouvelle Notification",
-        message.toString(),
+        messageR.toString(),
       );
     });
-
   } catch (e) {
     print("Error starting SignalR connection: $e");
   }
