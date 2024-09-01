@@ -19,7 +19,7 @@ Future<void> login(String email, String password, BuildContext context) async {
   email = email.trim();
   password = password.trim();
 
-  final url = Uri.parse('https://192.168.0.113:7168/api/User/login');
+  final url = Uri.parse('https://10.0.2.2:7168/api/User/login');
   try {
     final response = await http.post(
       url,
@@ -128,7 +128,7 @@ bool isTokenExpired(String token) {
 }
 
 Future<void> refreshToken(String token) async {
-  final url = Uri.parse('https://192.168.0.113:7168/api/User/refresh-token');
+  final url = Uri.parse('https://10.0.2.2:7168/api/User/refresh-token');
 
   try {
     final response = await http.post(
@@ -161,7 +161,7 @@ Future<void> _saveToken(String token) async {
 
 Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
-  final url = Uri.parse('https://192.168.0.113:7168/api/User/register/user');
+  final url = Uri.parse('https://10.0.2.2:7168/api/User/register/user');
 
   if (email.isEmpty || password.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -187,27 +187,16 @@ Future<void> register(String email, String password, String nomComplet,
     print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-
-      if (responseData.containsKey('token') &&
-          responseData['token'] != null &&
-          responseData['token'] is String) {
-        final String token = responseData['token'];
-        await _saveToken(token); // Sauvegarde du token dans SharedPreferences
-
-        ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Inscription réussie')),
         );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
 
-        // await login(email, password, context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Inscription réussie, mais token manquant ou invalide.')),
-        );
       }
-    } else {
+      else {
       String errorMessage =
           'Échec de l\'inscription. Code: ${response.statusCode}';
       if (response.body.isNotEmpty) {

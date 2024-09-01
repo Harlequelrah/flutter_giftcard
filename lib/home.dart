@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
       setState(() {
         accessToken = token;
       });
-      await connectToSignalR(notificationService);
+      await connectToSignalR(context,notificationService);
     } else {
       Navigator.pushReplacement(
         context,
