@@ -43,6 +43,9 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
+    dependencies {
+        implementation 'com.google.android.gms:play-services-location:21.3.0'
+    }
 
     buildTypes {
         release {

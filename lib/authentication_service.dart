@@ -166,7 +166,7 @@ Future<void> register(String email, String password, String nomComplet,
     String adresse, String telephone, BuildContext context) async {
   final url = Uri.parse('https://192.168.0.113:7168/api/User/register/user');
 
-  if (email.isEmpty || password.isEmpty) {
+  if (email.isEmpty || password.isEmpty || nomComplet.isEmpty  || adresse.isEmpty|| telephone.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Veuillez remplir tous les champs.')),
     );
@@ -224,11 +224,15 @@ Future<void> register(String email, String password, String nomComplet,
 }
 
 bool isValidEmail(String email) {
-  final emailRegex = RegExp(
-    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  final RegExp emailRegex = RegExp(
+    r'^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$',
+    caseSensitive: false,
+    multiLine: false,
   );
-  return emailRegex.hasMatch(email);
+  return emailRegex.hasMatch(email.trim());
 }
+
+
 
 Future<String?> getToken() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();

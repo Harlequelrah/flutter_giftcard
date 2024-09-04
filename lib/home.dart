@@ -27,8 +27,8 @@ class HomePageState extends State<HomePage> {
     _loadToken();
     notificationService = NotificationService();
     notificationService.init();
-  }
 
+  }
 
   Future<void> _loadToken() async {
     final String? token = await getToken();
@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
       setState(() {
         accessToken = token;
       });
-      await connectToSignalR(context,notificationService);
+      await connectToSignalR(context, notificationService);
     } else {
       Navigator.pushReplacement(
         context,

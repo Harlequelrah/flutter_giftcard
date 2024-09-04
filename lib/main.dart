@@ -8,6 +8,7 @@ import 'home.dart';
 import 'beneficiary_service.dart';
 import 'models.dart';
 import 'signalr_service.dart';
+import 'notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
   late BeneficiaryUser beneficiary;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  late NotificationService notificationService;
   bool _obscureText = true;
 
   @override
@@ -51,8 +53,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+ 
     _loadTokenAndData();
   }
+
+
 
   Future<void> _loadTokenAndData() async {
     await loadTokenState();
@@ -191,8 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                                             : Icons.visibility),
                                         onPressed: () {
                                           setState(() {
-                                            _obscureText =
-                                                !_obscureText;
+                                            _obscureText = !_obscureText;
                                           });
                                         },
                                       ),
