@@ -9,8 +9,6 @@ import 'beneficiary_service.dart';
 import 'models.dart';
 import 'signalr_service.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
@@ -41,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   late BeneficiaryUser beneficiary;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   void dispose() {
@@ -165,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Colors.grey.shade200))),
                                   child: TextField(
                                     controller: emailController,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: "Email",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
@@ -180,12 +179,24 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Colors.grey.shade200))),
                                   child: TextField(
                                     controller: passwordController,
-                                    obscureText: true,
+                                    obscureText: _obscureText,
                                     decoration: InputDecoration(
-                                        hintText: "Mot de Passe",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
+                                      hintText: "Mot de Passe",
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      suffixIcon: IconButton(
+                                        icon: Icon(_obscureText
+                                            ? Icons.visibility_off
+                                            : Icons.visibility),
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText =
+                                                !_obscureText;
+                                          });
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

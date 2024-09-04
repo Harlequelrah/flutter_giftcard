@@ -36,7 +36,7 @@ class PurchasePage extends StatelessWidget {
               const SizedBox(height: 20),
               FutureBuilder<String>(
                 future: Future.delayed(Duration(seconds: 1),
-                    () => accessToken), // Simule une opération asynchrone
+                    () => accessToken),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
