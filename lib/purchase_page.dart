@@ -35,15 +35,15 @@ class PurchasePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               FutureBuilder<String>(
-                future: Future.delayed(Duration(seconds: 1),
+                future: Future.delayed(const Duration(seconds: 1),
                     () => accessToken),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text('Erreur: ${snapshot.error}');
                   } else if (!snapshot.hasData) {
-                    return Text('Aucune donnée');
+                    return const Text('Aucune donnée');
                   } else {
                     return QrImageView(
                       data: snapshot.data!,
